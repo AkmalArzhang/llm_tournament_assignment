@@ -1,0 +1,37 @@
+/* Fancy card hover effect used by Home question cards */
+.fancy-card {
+	transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+	border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.fancy-card:hover {
+	transform: translateY(-6px) rotate(-0.5deg);
+	box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+	border-color: #3b82f6; /* blue-500 */
+}
+
+/* Responsive auth layout: stack the left blue panel on top on small screens */
+@media (max-width: 700px) {
+	.auth-layout-container {
+		flex-direction: column;
+	}
+
+	.auth-layout-left {
+		/* make left panel full width and keep the padding but center content */
+		width: 100% !important;
+		padding: 28px !important;
+		text-align: center;
+	}
+
+	.auth-layout-right {
+		/* form should be full width below the left panel */
+		width: 100% !important;
+		padding: 20px !important;
+	}
+
+	/* slightly round corners per section when stacked */
+	.auth-layout-container {
+		border-radius: 10px;
+		overflow: hidden;
+	}
+}
+

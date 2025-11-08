@@ -1,0 +1,100 @@
+import {
+  TextInput,
+  PasswordInput,
+  Paper,
+  Title,
+  Button,
+  Text,
+  Stack,
+  Anchor,
+} from "@mantine/core";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/userStore";
+import { useState } from "react";
+import AuthLayout from "@/components/layout/AuthLayout";
+
+export default function Register() {
+  const navigate = useNavigate();
+  const signup = useAuthStore((s) => s.signup);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    if (password !== confirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signup(username, password);
+      navigate("/");
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.detail || err?.message || "Registration failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <AuthLayout
+      leftTitle="Join Promptement"
+      leftText="Sign up to start participating in short prompt tournaments and learn by doing."
+    >
+      <Title ta="center">Create an Account</Title>
+      <Text c="dimmed" size="sm" ta="center" mt={5}>
+        Already have an account?{" "}
+        <Anchor component={RouterLink} to="/login">
+          Login
+        </Anchor>
+      </Text>
+
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <form onSubmit={handleSubmit}>
+          <Stack>
+            <TextInput
+              label="Username"
+              placeholder="Username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.currentTarget.value)}
+            />
+
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+
+            <PasswordInput
+              label="Confirm Password"
+              placeholder="Confirm your password"
+              required
+              value={confirm}
+              onChange={(e) => setConfirm(e.currentTarget.value)}
+            />
+
+            {error && (
+              <Text color="red" size="sm">
+                {error}
+              </Text>
+            )}
+
+            <Button type="submit" fullWidth mt="xl" loading={loading}>
+              Register
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </AuthLayout>
+  );
+}
