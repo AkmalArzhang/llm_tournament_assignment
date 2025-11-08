@@ -9,9 +9,9 @@ import {
   Anchor,
 } from "@mantine/core";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/userStore";
+import { useAuthStore } from "@/store/userStore";
 import { useState } from "react";
-import AuthLayout from "../../components/layout/AuthLayout";
+import AuthLayout from "@/components/layout/AuthLayout";
 
 export default function Login() {
   const navigate = useNavigate();

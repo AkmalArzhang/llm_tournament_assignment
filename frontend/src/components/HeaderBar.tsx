@@ -1,6 +1,6 @@
 import { Text, Avatar, Button, Box, Group, Flex } from "@mantine/core";
 import { Link as RouterLink } from "react-router-dom";
-import { useAuthStore } from "../store/userStore";
+import { useAuthStore } from "@/store/userStore";
 import { Logo } from "./Logo";
 
 export function HeaderBar() {
