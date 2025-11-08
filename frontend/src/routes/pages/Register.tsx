@@ -25,14 +25,24 @@ export default function Register() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (password !== confirm) {
+
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+    const trimmedConfirm = confirm.trim();
+
+    if (!trimmedUsername || !trimmedPassword) {
+      setError("Username and password cannot be empty or only whitespace");
+      return;
+    }
+
+    if (trimmedPassword !== trimmedConfirm) {
       setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
     try {
-      await signup(username, password);
+      await signup(trimmedUsername, trimmedPassword);
       navigate("/");
     } catch (err: any) {
       setError(
@@ -64,7 +74,7 @@ export default function Register() {
               placeholder="Username"
               required
               value={username}
-              onChange={(e) => setUsername(e.currentTarget.value)}
+              onChange={(e) => setUsername(e.currentTarget.value.trim())}
             />
 
             <PasswordInput
@@ -72,7 +82,7 @@ export default function Register() {
               placeholder="Your password"
               required
               value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
+              onChange={(e) => setPassword(e.currentTarget.value.trim())}
             />
 
             <PasswordInput
@@ -80,7 +90,7 @@ export default function Register() {
               placeholder="Confirm your password"
               required
               value={confirm}
-              onChange={(e) => setConfirm(e.currentTarget.value)}
+              onChange={(e) => setConfirm(e.currentTarget.value.trim())}
             />
 
             {error && (

@@ -24,9 +24,18 @@ export default function Login() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedUsername || !trimmedPassword) {
+      setError("Username and password cannot be empty or only whitespace");
+      return;
+    }
+
     setLoading(true);
     try {
-      await login(username, password);
+      await login(trimmedUsername, trimmedPassword);
       navigate("/");
     } catch (err: any) {
       setError(err?.response?.data?.detail || err?.message || "Login failed");
@@ -56,7 +65,7 @@ export default function Login() {
               placeholder="Username or email"
               required
               value={username}
-              onChange={(e) => setUsername(e.currentTarget.value)}
+              onChange={(e) => setUsername(e.currentTarget.value.trim())}
             />
 
             <PasswordInput
@@ -64,7 +73,7 @@ export default function Login() {
               placeholder="Your password"
               required
               value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
+              onChange={(e) => setPassword(e.currentTarget.value.trim())}
             />
 
             {error && (
