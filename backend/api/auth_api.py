@@ -16,14 +16,14 @@ def register_user(
     user: UserCreate, session: Session = Depends(get_session)
 ) -> TokenResponse:
     existing_user = session.exec(
-        select(User).where(User.username == user.username)
+        select(User).where(User.username == user.username.lower())
     ).first()
 
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists.")
 
     hashed = hash_password(user.password)
-    new_user = User(username=user.username, password=hashed)
+    new_user = User(username=user.username.lower(), password=hashed)
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
@@ -40,9 +40,11 @@ def register_user(
 def login_user(
     user: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)
 ) -> TokenResponse:
-    db_user = session.exec(select(User).where(User.username == user.username)).first()
+    db_user = session.exec(
+        select(User).where(User.username == user.username.strip().lower())
+    ).first()
 
-    if not db_user or not verify_password(user.password, db_user.password):
+    if not db_user or not verify_password(user.password.strip(), db_user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials.")
 
     token = create_access_token(data={"sub": db_user.username})

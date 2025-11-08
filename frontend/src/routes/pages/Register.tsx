@@ -45,9 +45,22 @@ export default function Register() {
       await signup(trimmedUsername, trimmedPassword);
       navigate("/");
     } catch (err: any) {
-      setError(
-        err?.response?.data?.detail || err?.message || "Registration failed"
-      );
+      console.error("Registration error:", err);
+      let errorMessage = "Registration failed";
+
+      if (err?.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          errorMessage = err.response.data.detail
+            .map((e: any) => e.msg || e.message || JSON.stringify(e))
+            .join(", ");
+        } else {
+          errorMessage = err.response.data.detail;
+        }
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -94,7 +107,7 @@ export default function Register() {
             />
 
             {error && (
-              <Text color="red" size="sm">
+              <Text c="red" size="sm">
                 {error}
               </Text>
             )}

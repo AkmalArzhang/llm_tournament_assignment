@@ -38,7 +38,22 @@ export default function Login() {
       await login(trimmedUsername, trimmedPassword);
       navigate("/");
     } catch (err: any) {
-      setError(err?.response?.data?.detail || err?.message || "Login failed");
+      console.error("Login error:", err);
+      let errorMessage = "Login failed";
+
+      if (err?.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          errorMessage = err.response.data.detail
+            .map((e: any) => e.msg || e.message || JSON.stringify(e))
+            .join(", ");
+        } else {
+          errorMessage = err.response.data.detail;
+        }
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
