@@ -4,9 +4,10 @@ from typing import Optional, TYPE_CHECKING, ClassVar
 from sqlmodel import SQLModel, select
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_property
+from .tournament_model import Tournament
 
 if TYPE_CHECKING:
-    from . import Question, Tournament
+    from . import Question
 
 
 class Prompt(TimestampedBaseModel, table=True):
@@ -27,8 +28,6 @@ class Prompt(TimestampedBaseModel, table=True):
 
     @win_count.expression
     def win_count(cls):
-        from .tournament_model import Tournament
-
         return (
             select(func.count(Tournament.id))
             .where(Tournament.winning_prompt_id == cls.id)

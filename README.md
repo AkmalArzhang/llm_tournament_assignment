@@ -74,14 +74,12 @@ pip install -r requirements.txt
 ### 4. Create environment file
 Create a `.env` file in the `backend` directory:
 ```env
-SECRET_KEY=your-secret-key-here-change-in-production
+SECRET_KEY=SECRET_KEY
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 DEBUG=True
 DATABASE_URL=sqlite:///database.sqlite3
 ```
-
-**Important:** Replace `your-secret-key-here` with a strong random string.
 
 ### 5. Run the backend server
 ```bash
