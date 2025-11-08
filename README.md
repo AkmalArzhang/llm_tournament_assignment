@@ -79,6 +79,7 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 DEBUG=True
 DATABASE_URL=sqlite:///database.sqlite3
+CORS_ORIGINS=http://localhost:5173,http://localhost:3000
 ```
 
 ### 5. Run the backend server

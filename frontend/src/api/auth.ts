@@ -1,10 +1,5 @@
 import api, { setAuthToken } from "./axios";
-
-interface TokenResponse {
-  access_token: string;
-  token_type: string;
-  username: string;
-}
+import type { TokenResponse } from "@/types";
 
 export async function login(username: string, password: string) {
   const body = new URLSearchParams();
