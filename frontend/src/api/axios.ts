@@ -8,8 +8,7 @@ const api = axios.create({
 });
 
 // Intercept 401 responses and redirect to login. This ensures that when the
-// backend returns Unauthorized, the app clears stored credentials and sends
-// the user back to the login page instead of showing an error state.
+// backend returns Unauthorized, the app sends the user back to the login page.
 api.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -17,14 +16,6 @@ api.interceptors.response.use(
     const publicPaths = ["/login", "/register"];
 
     if (status === 401) {
-      try {
-        localStorage.removeItem("auth_token");
-      } catch (e) {
-        // ignore
-      }
-      
-      delete api.defaults.headers.common["Authorization"];
-
       if (typeof window !== "undefined" && !publicPaths.includes(window.location.pathname)) {
         window.location.href = "/login";
       }
@@ -32,13 +23,5 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
-
-export function setAuthToken(token?: string) {
-  if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common["Authorization"];
-  }
-}
 
 export default api;

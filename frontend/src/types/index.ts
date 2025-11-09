@@ -7,10 +7,9 @@ export interface AuthState {
   logout: () => void;
 }
 
-export interface TokenResponse {
-  access_token: string;
-  token_type: string;
+export interface AuthResponse {
   username: string;
+  message: string;
 }
 
 export type Prompt = {
